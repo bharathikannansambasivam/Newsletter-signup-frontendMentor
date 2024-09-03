@@ -5,19 +5,23 @@ import Mob_pic from "../images/Mob-pic.svg";
 import Des_pic from "../images/Des-pic.svg";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
-import * as Yup from "Yup";
+import * as Yup from "yup";
+
 function Subscription() {
   const emailSchema = Yup.object({
     email: Yup.string()
-      .email("Please enter Valid email")
-      .required("Valid email required "),
+      .email("Please enter a valid email")
+      .required("Valid email required"),
   });
+
   const navigate = useNavigate();
   const [email, setEmail] = useContext(emailContext);
+
   const handleSubmit = (value) => {
     setEmail(value.email);
     navigate("/greeting");
   };
+
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -25,6 +29,7 @@ function Subscription() {
     validationSchema: emailSchema,
     onSubmit: handleSubmit,
   });
+
   const list = [
     "Product discovery and building what matters",
     "Measuring to ensure updates are a success",
@@ -36,7 +41,7 @@ function Subscription() {
       <div className="bg-white rounded-3xl p-5">
         <div className="sm:flex sm:flex-row flex flex-col-reverse">
           <div className="flex flex-col justify-center w-full sm:w-96">
-            <h2 className="text-4xl text-center font-roboto font-bold mt-6 ">
+            <h2 className="text-4xl text-center font-roboto font-bold mt-6">
               Stay updated!
             </h2>
             <p className="text-center p-3">
@@ -53,12 +58,14 @@ function Subscription() {
               className="flex flex-col pl-8 p-9 gap-5"
             >
               <div className="flex flex-col">
-                <div className="flex items-center justify-between text-center ">
+                <div className="flex items-center justify-between text-center">
                   <label className="font-roboto font-bold" htmlFor="email">
                     Email address
                   </label>
                   <p className="text-Tomato text-center text-xs">
-                    {formik.errors.email}
+                    {formik.touched.email && formik.errors.email
+                      ? formik.errors.email
+                      : ""}
                   </p>
                 </div>
 
@@ -66,7 +73,7 @@ function Subscription() {
                   name="email"
                   type="email"
                   placeholder="email@company.com"
-                  className={`border  p-3 rounded-lg ${
+                  className={`border p-3 rounded-lg ${
                     formik.touched.email && formik.errors.email
                       ? "border-Tomato"
                       : "border-black"
